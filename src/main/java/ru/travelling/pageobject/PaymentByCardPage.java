@@ -1,10 +1,15 @@
 package ru.travelling.pageobject;
 
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import ru.travelling.data.Card;
 
+import java.time.Duration;
+
+import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.page;
 
 public class PaymentByCardPage {
@@ -41,6 +46,9 @@ public class PaymentByCardPage {
     @FindBy(how = How.XPATH, using = ".//span[text()='Продолжить']")
     private SelenideElement continueButton;
 
+    @FindBy(how = How.XPATH, using = ".//div[contains(@class, 'notification_status')]")
+    private ElementsCollection notificationCollection;
+
     public PaymentByCardPage fillCardDetails(Card card) {
         numberInput.sendKeys(card.getNumber());
         monthInput.sendKeys(card.getMonth());
@@ -50,11 +58,10 @@ public class PaymentByCardPage {
         return page(PaymentByCardPage.class);
     }
 
-    public TourOfferPage continueButtonClick() {
+    public PaymentByCardPage continueButtonClick() {
         continueButton.click();
-        return page(TourOfferPage.class);
+        return page(PaymentByCardPage.class);
     }
-
 
     public String getErrorNumber() {
         return numberSub.getText();
@@ -75,4 +82,23 @@ public class PaymentByCardPage {
     public String getErrorCvc() {
         return cvcSub.getText();
     }
+
+    public String getNotificationTitle(int notificationNumber) {
+        return notificationCollection
+                .shouldBe(CollectionCondition.sizeGreaterThan(notificationNumber - 1), Duration.ofSeconds(30))
+                .get(notificationNumber).$(byXpath("./div[@class='notification__title']"))
+                .innerHtml();
+    }
+
+    public String getNotificationContent(int notificationNumber) {
+        return notificationCollection
+                .shouldBe(CollectionCondition.sizeGreaterThan(notificationNumber - 1), Duration.ofSeconds(30))
+                .get(notificationNumber)
+                .$(byXpath(".//div[@class='notification__content']")).innerHtml();
+    }
+
+    public int getNotificationCount() {
+        return notificationCollection.size();
+    }
+
 }

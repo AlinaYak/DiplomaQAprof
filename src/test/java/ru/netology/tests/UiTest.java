@@ -10,55 +10,54 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static com.codeborne.selenide.Selenide.open;
 
-public class UiTest extends BaseUiTest {
-
+public class UiTest {
 
     @Test
     @DisplayName("Успешная покупка при оплате дебетовой картой")
     public void buyingWithDebitCardSuccess() {
-        TourOfferPage tourOfferPage = open(TourOfferPage.URL, TourOfferPage.class)
+        PaymentByCardPage paymentByCardPage = open(TourOfferPage.URL, TourOfferPage.class)
                 .buyTour()
                 .fillCardDetails(Card.getApprovedCard())
                 .continueButtonClick();
-        assertEquals("Успешно", tourOfferPage.getNotificationTitle(0), "Сообщения об успехе нет");
-        assertEquals("Операция одобрена Банком.", tourOfferPage.getNotificationContent(0), "Сообщения об успехе нет");
-        assertEquals(1, tourOfferPage.getNotificationCount(), "Сообщение не одно");
+        assertEquals("Успешно", paymentByCardPage.getNotificationTitle(0), "Сообщения об успехе нет");
+        assertEquals("Операция одобрена Банком.", paymentByCardPage.getNotificationContent(0), "Сообщения об успехе нет");
+        assertEquals(1, paymentByCardPage.getNotificationCount(), "Сообщение не одно");
     }
 
     @Test
     @DisplayName("Отказ в покупке билета при оплате дебетовой картой")
     public void buyingWithDebitCardNotEnoughMoneyFail() {
-        TourOfferPage tourOfferPage = open(TourOfferPage.URL, TourOfferPage.class)
+        PaymentByCardPage paymentByCardPage = open(TourOfferPage.URL, TourOfferPage.class)
                 .buyTour()
                 .fillCardDetails(Card.getDeclinedCard())
                 .continueButtonClick();
-        assertEquals("Ошибка", tourOfferPage.getNotificationTitle(0), "Сообщения об ошибке неверно");
-        assertEquals("Ошибка! Банк отказал в проведении операции.", tourOfferPage.getNotificationContent(0), "Сообщения об ошибке нет");
-        assertEquals(1, tourOfferPage.getNotificationCount(), "Сообщение не одно");
+        assertEquals("Ошибка", paymentByCardPage.getNotificationTitle(0), "Сообщения об ошибке неверно");
+        assertEquals("Ошибка! Банк отказал в проведении операции.", paymentByCardPage.getNotificationContent(0), "Сообщения об ошибке нет");
+        assertEquals(1, paymentByCardPage.getNotificationCount(), "Сообщение не одно");
     }
 
     @Test
     @DisplayName("Успешная покупка при оплате в кредит картой")
     public void buyingWithCreditCardSuccess() {
-        TourOfferPage tourOfferPage = open(TourOfferPage.URL, TourOfferPage.class)
+        PaymentByCardPage paymentByCardPage = open(TourOfferPage.URL, TourOfferPage.class)
                 .buyOnCreditTour()
                 .fillCardDetails(Card.getApprovedCard())
                 .continueButtonClick();
-        assertEquals("Успешно", tourOfferPage.getNotificationTitle(0), "Сообщения об успехе нет");
-        assertEquals("Операция одобрена Банком.", tourOfferPage.getNotificationContent(0), "Сообщения об успехе нет");
-        assertEquals(1, tourOfferPage.getNotificationCount(), "Сообщение не одно");
+        assertEquals("Успешно", paymentByCardPage.getNotificationTitle(0), "Сообщения об успехе нет");
+        assertEquals("Операция одобрена Банком.", paymentByCardPage.getNotificationContent(0), "Сообщения об успехе нет");
+        assertEquals(1, paymentByCardPage.getNotificationCount(), "Сообщение не одно");
     }
 
     @Test
     @DisplayName("Отказ в покупке в кредит")
     public void buyingWithCreditCardNotEnoughMoneyFail() {
-        TourOfferPage tourOfferPage = open(TourOfferPage.URL, TourOfferPage.class)
+        PaymentByCardPage paymentByCardPage = open(TourOfferPage.URL, TourOfferPage.class)
                 .buyOnCreditTour()
                 .fillCardDetails(Card.getDeclinedCard())
                 .continueButtonClick();
-        assertEquals("Ошибка", tourOfferPage.getNotificationTitle(1), "Сообщения об ошибке нет");
-        assertEquals("Ошибка! Банк отказал в проведении операции.", tourOfferPage.getNotificationContent(1), "Сообщения об ошибке нет");
-        assertEquals(1, tourOfferPage.getNotificationCount(), "Сообщение не одно");
+        assertEquals("Ошибка", paymentByCardPage.getNotificationTitle(1), "Сообщения об ошибке нет");
+        assertEquals("Ошибка! Банк отказал в проведении операции.", paymentByCardPage.getNotificationContent(1), "Сообщения об ошибке нет");
+        assertEquals(1, paymentByCardPage.getNotificationCount(), "Сообщение не одно");
     }
 
     @Test
